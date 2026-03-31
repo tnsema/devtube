@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## CloudLens
+
+A polished Next.js App Router app for discovering cloud-learning videos through a secure server-side YouTube search flow.
 
 ## Getting Started
 
-First, run the development server:
+1. Create a local env file:
+
+```bash
+YOUTUBE_API_KEY=your_youtube_data_api_v3_key
+```
+
+Place that value in `.env.local` at the project root. The key is read only on the server from `process.env.YOUTUBE_API_KEY`.
+
+2. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How It Works
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- The browser calls `app/api/search/route.ts` with a query string.
+- That route handler reads `process.env.YOUTUBE_API_KEY` on the server and calls the YouTube Data API v3 search endpoint.
+- The route normalizes the YouTube response and returns only the UI-safe fields used by the frontend.
+- Client components render the search UI, recent searches, watch-later state, and responsive video cards.
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
+- Non-secret app settings live in `lib/config.ts`.
+- The YouTube key must never be moved to `NEXT_PUBLIC_*`.
+- Recent searches and watch-later items are stored locally in the browser with `localStorage`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run dev
+npm run lint
+npm run build
+```
